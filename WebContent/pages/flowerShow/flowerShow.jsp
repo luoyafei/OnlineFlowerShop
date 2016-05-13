@@ -42,10 +42,17 @@
 				<br> <br>
 
 				<!-- 第二行 -->
-				<div class="row clearfix">
-					<div class="col-md-12 column">
-						
-					</div>
+				<div class="row">
+				  <div class="col-sm-6 col-md-4">
+				    <div class="thumbnail">
+				      <img data-src="holder.js/300x300" alt="...">
+				      <div class="caption">
+				        <h3>Thumbnail label</h3>
+				        <p>...</p>
+				        <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+				      </div>
+				    </div>
+				  </div>
 				</div>
 
 			</div>
@@ -60,6 +67,28 @@
 	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 	<!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript">
+		
+	/* 
+	*   | flowerId       | int(11)      | NO   | PRI | NULL    | auto_increment |
+		| flowerName     | varchar(255) | YES  | UNI | NULL    |                |
+		| flowerCategary | varchar(255) | NO   |     | NULL    |                |
+		| flowerPicture  | varchar(255) | NO   |     | NULL    |                |
+		| flowePrice     | varchar(11)  | NO   |     | NULL    |                |
+		| flowerDescribe | text         | NO   |     | NULL    |
+	*/
+	
+		$(document).ready(function() {
+			var flowerId = <%=request.getParameter("flowerId") %>;
+			if(flowerId == null) {
+				window.location.href = "/OnlineFlowerShop/pages/main/main.jsp";
+			} else {
+				//alert(flowerId);
+			}
+			
+		});
+	</script>
 	
 </body>
 </html>
