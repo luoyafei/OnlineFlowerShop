@@ -1,8 +1,8 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="com.flowershop.bean.*" %>
+<%!User user; %>
 <%
-	User user;
 	if(session.getAttribute("user") != null) {
 		user = (User)session.getAttribute("user");
 	} else {
@@ -160,14 +160,14 @@ img {
 		<div class="form-group">
 			<label for="email" class="col-sm-2 control-label">邮箱地址</label><br>
 			<div class="col-sm-7">
-				<input type="email" class="form-control" id="email" />
+				<input type="text" class="form-control" id="email"><%=user.getEmail() %></input>
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label for="password" class="col-sm-2 control-label">原密码</label><br>
 			<div class="col-sm-7">
-				<input type="password" class="form-control" id="password" />
+				<input type="password" class="form-control" id="password"><%=user.getUserPassword() %></input>
 			</div>
 		</div>
 		<div class="form-group">
@@ -199,10 +199,6 @@ img {
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	
 	<script type="text/javascript">
-		
-		$(document).ready(function() {
-			
-		});
 	
 		function submitUpdatePassword() {
 			var email = $("#email").val().trim();
@@ -217,14 +213,30 @@ img {
 				alert("新密码两次输入不一致！");
 				return false;
 			} else {
-				$.get('/onlineFlowerShop/UpdatePassword', {
+				$.get('/OnlineFlowerShop/UpdatePassword', {
 					email : email,
 					password : password,
 					newpassword : newpassword,
 					repassword : repassword
 				}, function(data, textStatus) {
-					alert(textStatus);
-					alert(JSON.stringify(data));
+					if(textStatus == "success") {
+						
+						//-1(修改失败) 0(原始密码错误！),1(邮箱不可用！)，2(修改成功)
+						
+						if(data.status == "-1") {
+							alert("修改失败！");
+						} else if(data.status == "0") {
+							alert("原始密码错误！");
+						} else if(data.status == "1") {
+							alert("该邮箱已被注册");
+						} else {
+							alert("修改成功");
+							window.location.href = "/OnlineFlowerShop/pages/modifyUserInfo/modifyUserInfo.jsp";
+						}
+						
+					} else {
+						alert("刷新重试！");
+					}
 				}, 'json');			
 			}
 			

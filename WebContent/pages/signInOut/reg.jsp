@@ -147,6 +147,9 @@
 		src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	
 	<script>
+	/* 
+	*异步发送注册请求，通过返回的json数据，-1代表注册失败！0代表用户邮箱已被注册！1代表用户注册成功！成功之后将自动跳转到主页！
+	*/
 		function registerFunc() {
 			var email = $("#email").val().trim();
 			var password = $("#password").val().trim();
@@ -177,9 +180,13 @@
 				}, 'json');
 			}
 		}
-		
+	
+	
+	
+		/* 
+		*异步发送登陆请求，通过返回的json数据，-1代表登陆失败！0代表用户邮箱或密码错误！1代表用户登陆成功！成功之后将自动跳转到主页！
+		*/	
 		function loginFunc() {
-			
 			var email = $("#loginemail").val().trim();
 			var password = $("#loginpassword").val().trim();
 			if (email == "" || password == "") {
@@ -195,7 +202,7 @@
 						if(data.status == "-1") {
 							alert("登陆失败！");
 						} else if(data.status == "0") {
-							alert("用户名或密码错误！");
+							alert("用户邮箱或密码错误！");
 						} else {
 							alert("登陆成功！");
 							window.location.href = "/OnlineFlowerShop/pages/main/main.jsp";

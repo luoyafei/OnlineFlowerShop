@@ -14,16 +14,16 @@ import com.flowershop.bean.User;
 import com.flowershop.factory.ServiceFactory;
 
 /**
- * Servlet implementation class LoginIn
+ * Servlet implementation class UpdatePassword
  */
-@WebServlet("/LoginIn")
-public class LoginIn extends HttpServlet {
+@WebServlet("/UpdatePassword")
+public class UpdatePassword extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginIn() {
+    public UpdatePassword() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,52 +33,46 @@ public class LoginIn extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		
 		PrintWriter out = response.getWriter();
 		
-		/**
-		 * 获取从前台传来的数据
-		 * */
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
-		
-		User user = new User();
+		String newpassword = request.getParameter("newpassword");
+		/**
+		 * @param status
+		 * @return -1(修改失败) 0(原始密码错误！),1(邮箱不可用！)，2(修改成功)
+		 * */
 		
 		Integer status = -1;
 		boolean flag = false;
-		/**
-		 * 先通过服务大工厂生产出用户服务，通过用户服务调用验证用户邮箱是否存在的方法！
-		 * */
-		if(!ServiceFactory.createUserService().validateUserName(email)) {
-			/**
-			 * 如果为存在的邮箱，则通过邮箱名，调用用户服务的getUserInName(User user)方法获取到整个user的Bean!
-			 * */
-			user = ServiceFactory.createUserService().getUserInName(email);
-			if(user.getUserPassword().equals(password)) {
-				/**
-				 * 获取到整个user的Bean后获取到密码与从前台传来的密码对比，如果一致，则登陆成功，反之则失败！
-				 * */
-				flag = true;
-			} else {
-				status = 0;
-			}
-		} else
-			status = 0;
+		User user = new User();
+		user.setEmail(email);
+		user.setUserPassword(newpassword);
+		HttpSession session = request.getSession(false);
+		User ulogin = (User)session.getAttribute("user");
+		user.setUserId(ulogin.getUserId());
 		
-		if(flag) {
-			/**
-			 * 如果登陆成功，则将用户的Bean保存如session
-			 * */
-			status = 1;
-			HttpSession session = request.getSession();
-			session.setAttribute("user", user);
+		if(ulogin.getUserPassword().equals(password)) {
+			if(ServiceFactory.createUserService().validateUserName(email)) {
+				flag = ServiceFactory.createUserService().updateUser(user);
+				if(flag) {
+					status = 2;
+					session.removeAttribute("user");
+					session.setAttribute("user", user);
+				} else {
+					status = -1;
+				}
+			} else
+				status = 1;
+		} else {
+			status = 0;
 		}
 
-		/**
-		 * 手动拼接json的字符串，然后发送往前台！
-		 * */
+
 		String str = "{\"" + "status" + "\":\"" + status + "\"}";
 		out.print(str);
 		out.flush();

@@ -15,9 +15,9 @@
 			
 			
 				<li><a href="/OnlineFlowerShop/pages/main/main.jsp">花店首页</a></li>
-				<li><a href="#">爱情鲜花</a></li>
-				<li><a href="#">亲情鲜花</a></li>
-				<li><a href="#">友情鲜花</a></li>
+				<li><a href="/OnlineFlowerShop/pages/flowerShow/flowerShow.jsp&flowerId=0">爱情鲜花</a></li>
+				<li><a href="/OnlineFlowerShop/pages/flowerShow/flowerShow.jsp&flowerId=1">亲情鲜花</a></li>
+				<li><a href="/OnlineFlowerShop/pages/flowerShow/flowerShow.jsp&flowerId=2">友情鲜花</a></li>
 				<li><a href="/OnlineFlowerShop/pages/commentFeedback/commentFeedback.jsp">意见反馈</a></li>
 			</ul>
 			<div class="cls"></div>

@@ -137,7 +137,26 @@ System.out.println("用户注册时，往数据库插入用户的信息是出错
 	@Override
 	public boolean updateUser(User user) {
 		// TODO Auto-generated method stub
-		return false;
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "update user set email = ?, userPassword = ? where userId = ?";
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, user.getEmail());
+			pstmt.setString(2, user.getUserPassword());
+			pstmt.setInt(3, user.getUserId());
+			if(pstmt.executeUpdate() >= 1)
+				return true;
+			else
+				return false;
+		} catch(SQLException e) {
+System.out.println("用户修改密码时，往数据库插入用户的信息时出错！");
+			e.printStackTrace();
+			return false;
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedConnection(conn);
+			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+		}
 	}
 	
 }

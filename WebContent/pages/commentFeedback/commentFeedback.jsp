@@ -1,5 +1,6 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="com.flowershop.bean.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -147,33 +148,67 @@ img {
 	<!-- 第三行布局 -->
 
 
-	<form class="form-horizontal" role="form">
+	<div class="form-horizontal" role="form">
 		<div class="form-group">
-			<label for="inputtext3" class="col-sm-2 control-label">您的建议</label><br>
+			<label for="messageContent" class="col-sm-2 control-label">您的建议</label><br>
 			<div class="col-sm-7">
-				<textarea type="text" class="form-control" id="inputtext3" rows="13"></textarea>
+				<textarea type="text" class="form-control" name="messageContent" id="messageContent" rows="13"></textarea>
 			</div>
 		</div>
 
 
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">
-				<button type="submit" class="btn btn-default">提交</button>
+				<button onclick="submitMessage()" class="btn btn-default">提交</button>
 			</div>
 		</div>
-	</form>
+	</div>
 
 	<!-- 第四行布局 -->
 	<jsp:include page="../modul/footer.jsp" flush="true"></jsp:include>
 
-
-
 	<!-- 如果要使用Bootstrap的js插件，必须先调入jQuery -->
 	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 	<!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
-	<script
-		src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script>
+		function submitMessage() {
+			var messageContent = $("#messageContent").val().trim();
+			
+			<%
+				if(session.getAttribute("user") == null) {
+			%>
+				alert("请先登录再操作！");
+				return false;
+			<%} else {%>
+			
+				/* 
+				*异步发送意见，通过返回的json数据，来判断是否成功（-1，失败;1，成功）
+				*/
+			
+				if(messageContent == "") {
+					alert("请输入您的意见！");
+					return false;
+				} else {
+					$.get('/OnlineFlowerShop/SaveMessage', {
+						messageContent : messageContent
+					}, function(data, textStatus){
+						if(textStatus == "success") {
+							
+							if(data.status == "1") {
+								alert("意见发送成功！");
+							} else {
+								alert("意见发送失败！");
+							}
+						} else {
+							alert("请刷新重试！");
+						}
+					}, 'json');
+				}
+			
+			<%}%>
+		}
+	</script>
 
 </body>
 </html>
