@@ -17,11 +17,10 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 <!-- 自定义css应用 -->
-<link href="2.css" rel="stylesheet">
+<link href="../../assets/css/1.css" rel="stylesheet">
 <!--导航栏所需调用-->
 <link href="css/style.css" rel="stylesheet" type="text/css">
-<script src="http://lib.sinaapp.com/js/jquery/1.4.1/jquery.min.js"
-	type="text/javascript"></script>
+<script src="http://lib.sinaapp.com/js/jquery/1.4.1/jquery.min.js" type="text/javascript"></script>
 
 <SCRIPT type=text/javascript>
 	$(document).ready(function() {
@@ -126,15 +125,6 @@ img {
 </head>
 
 <body>
-
-	<div class="lanrenzhijia_service">
-		<ul>
-			<span class="right_bar"></span>
-			<a href="http://wpa.qq.com/msgrd?v=3&uin=27864245&site=qq&menu=yes"
-				class="right_qq" target="_blank"></a>
-			<span class="right_phone">400-XXXXX</span>
-		</ul>
-	</div>
 	<script src="http://www.lanrenzhijia.com/ajaxjs/jquery.min.js"></script>
 	<script>
 		$(function() {
@@ -152,19 +142,7 @@ img {
 	<!-- 第一行布局 -->
 		<jsp:include page="../modul/top.jsp" flush="true"></jsp:include>
 	<!-- 第二行布局 -->
-	<div class="row clearfix">
-		<div id="menu2">
-			<ul>
-				<li><a href="#">花店首页</a></li>
-				<li><a href="#">个人信息</a></li>
-				<li><a href="#">爱情鲜花</a></li>
-				<li><a href="#">亲情鲜花</a></li>
-				<li><a href="#">友情鲜花</a></li>
-				<li><a href="#">意见反馈</a></li>
-			</ul>
-			<div class="cls"></div>
-		</div>
-	</div>
+		<jsp:include page="../modul/content.jsp" flush="true"></jsp:include>
 
 	<!-- 第三行布局 -->
 

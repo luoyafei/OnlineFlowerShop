@@ -1,9 +1,14 @@
 package com.flowershop.daoimp;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.flowershop.bean.User;
 import com.flowershop.dao.UserDao;
+import com.flowershop.factory.ConnectionFactory;
 
 public class UserMysqlDao implements UserDao{
 
@@ -16,13 +21,60 @@ public class UserMysqlDao implements UserDao{
 	@Override
 	public User getUserInId(Integer userId) {
 		// TODO Auto-generated method stub
-		return null;
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "select * from user where userId = ?";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		User user = new User();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, userId);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				user.setUserId(rs.getInt("userId"));
+				user.setEmail(rs.getString("email"));
+				user.setUserPassword(rs.getString("userPassword"));
+				user.setUserRole(rs.getInt("userRole"));
+			}
+		} catch(SQLException e) {
+System.out.println("通过用户Id获取用户信息");
+			e.printStackTrace();
+			return null;
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedConnection(conn);
+			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+		}
+		return user;
 	}
 
 	@Override
 	public User getUserInName(String nackName) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "select * from user where email = ?";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		User user = new User();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, nackName);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				user.setUserId(rs.getInt("userId"));
+				user.setEmail(rs.getString("email"));
+				user.setUserPassword(rs.getString("userPassword"));
+				user.setUserRole(rs.getInt("userRole"));
+			}
+		} catch(SQLException e) {
+System.out.println("通过用户邮箱，获取用户的信息");
+			e.printStackTrace();
+			return null;
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedConnection(conn);
+			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+		}
+		return user;
 	}
 
 	@Override
@@ -34,13 +86,52 @@ public class UserMysqlDao implements UserDao{
 	@Override
 	public boolean validateUserName(String nackName) {
 		// TODO Auto-generated method stub
-		return false;
+		boolean flag = false;
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "select email from user where email = ?";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, nackName);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return flag = false;
+			} else {
+				return flag = true;
+			}
+		} catch(SQLException e) {
+System.out.println("数据库验证邮箱是否重复出错！");
+			flag = false;
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedCPR(conn, pstmt, rs);
+		}
+		return flag;
 	}
 
 	@Override
 	public boolean insertUser(User user) {
 		// TODO Auto-generated method stub
-		return false;
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "insert into user() values(null, ?, ?, 0)";
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, user.getEmail());
+			pstmt.setString(2, user.getUserPassword());
+			if(pstmt.executeUpdate() >= 1)
+				return true;
+			else
+				return false;
+		} catch(SQLException e) {
+System.out.println("用户注册时，往数据库插入用户的信息是出错！");
+			e.printStackTrace();
+			return false;
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedConnection(conn);
+			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+		}
 	}
 
 	@Override

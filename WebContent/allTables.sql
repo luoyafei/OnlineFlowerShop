@@ -1,3 +1,5 @@
+create database onlineFlowerShop;
+
 user:
 create table user (
 	userId int primary key auto_increment,

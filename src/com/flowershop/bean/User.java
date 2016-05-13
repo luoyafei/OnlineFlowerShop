@@ -5,7 +5,6 @@ public class User {
 	private String email = "";
 	private String userPassword = "";
 	private Integer userRole = 0;
-	
 	public Integer getUserId() {
 		return userId;
 	}
@@ -30,5 +29,6 @@ public class User {
 	public void setUserRole(Integer userRole) {
 		this.userRole = userRole;
 	}
+	
 	
 }
