@@ -25,7 +25,6 @@
 <!-- 自定义css应用 -->
 <link href="1.css" rel="stylesheet">
 </head>
-<html>
 <body>
 	<section>
 	<div class="container">
@@ -37,7 +36,8 @@
 
 				<br> <br> <br>
 				<div align="center">
-					<a href="/OnlineFlowerShop/pages/main/main.jsp"><img src="image/1.png"></a>
+					<a href="/OnlineFlowerShop/pages/main/main.jsp"><img
+						src="image/1.png"></a>
 				</div>
 				<br> <br>
 
@@ -53,7 +53,7 @@
 							<div class="tab-content">
 								<div class="tab-pane" id="panel-703736">
 									<p>
-										<div role="from" name="login">
+									<div role="from" name="login">
 
 										<div class="form-group">
 											<label for="email" class="sm-2 control-label"></label>
@@ -75,14 +75,14 @@
 										<div class="form-group">
 											<label for="repassword" class="control-label"></label>
 											<div class="col-sm-12">
-												<input type="password" class="form-control input-lg" id="repassword"
-												naem="repassword" placeholder="请再次输入密码" /><br>
+												<input type="password" class="form-control input-lg"
+													id="repassword" name="repassword" placeholder="请再次输入密码" /><br>
 											</div>
 										</div>
 										<div class="form-group">
 											<div class="col-sm-12">
-												<button class="btn btn-primary btn-block"
-													id="CZ" name="CZ" onclick="registerFunc()">立即注册</button>
+												<button class="btn btn-primary btn-block" id="CZ" name="CZ"
+													onclick="registerFunc()">立即注册</button>
 											</div>
 										</div>
 									</div>
@@ -90,7 +90,6 @@
 								</div>
 								<div class="tab-pane active" id="panel-96404">
 									<p>
-									
 									<div role="from" name="login">
 										<!-- 个人账号 -->
 										<div class="form-group">
@@ -120,8 +119,8 @@
 										<!-- 登陆 -->
 										<div class="form-group">
 
-											<button onclick="loginFunc()" class="btn btn-primary btn-block"
-												name="DL">登陆</button>
+											<button onclick="loginFunc()"
+												class="btn btn-primary btn-block" name="DL">登陆</button>
 										</div>
 
 									</div>
@@ -145,32 +144,32 @@
 	<!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
 	<script
 		src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	
+
 	<script>
-	/* 
-	*异步发送注册请求，通过返回的json数据，-1代表注册失败！0代表用户邮箱已被注册！1代表用户注册成功！成功之后将自动跳转到主页！
-	*/
+		/* 
+		 *异步发送注册请求，通过返回的json数据，-1代表注册失败！0代表用户邮箱已被注册！1代表用户注册成功！成功之后将自动跳转到主页！
+		 */
 		function registerFunc() {
 			var email = $("#email").val().trim();
 			var password = $("#password").val().trim();
 			var repassword = $("#repassword").val().trim();
 			if (email == "" || password == "" || repassword == "") {
-				alert("請將信息填寫完整！");
+				alert("请将信息填写完整！");
 				return;
-			} else if(password != repassword) {
-				alert("兩次輸入密碼不一致！");
+			} else if (password != repassword) {
+				alert("两次输入密码不一致！");
 				return;
 			} else {
-				$.post('/OnlineFlowerShop/UserRegister', {
+				$.post('/OnlineFlowerShop/UserRegister',{
 					email : email,
 					password : password,
 					repassword : repassword
-				}, function(data, textStatus) {
+				},function(data, textStatus) {
 					//alert(textStatus);
-					if(textStatus == "success") {
-						if(data.status == "-1") {
+					if (textStatus == "success") {
+						if (data.status == "-1") {
 							alert("注册失败！");
-						} else if(data.status == "0") {
+						} else if (data.status == "0") {
 							alert("用户邮箱已被注册！");
 						} else {
 							alert("注册成功！");
@@ -180,28 +179,26 @@
 				}, 'json');
 			}
 		}
-	
-	
-	
+
 		/* 
-		*异步发送登陆请求，通过返回的json数据，-1代表登陆失败！0代表用户邮箱或密码错误！1代表用户登陆成功！成功之后将自动跳转到主页！
-		*/	
+		 *异步发送登陆请求，通过返回的json数据，-1代表登陆失败！0代表用户邮箱或密码错误！1代表用户登陆成功！成功之后将自动跳转到主页！
+		 */
 		function loginFunc() {
 			var email = $("#loginemail").val().trim();
 			var password = $("#loginpassword").val().trim();
 			if (email == "" || password == "") {
-				alert("請將信息填寫完整！");
+				alert("请将信息填写完整！");
 				return;
 			} else {
-				$.post('/OnlineFlowerShop/LoginIn', {
+				$.post('/OnlineFlowerShop/LoginIn',{
 					email : email,
 					password : password,
-				}, function(data, textStatus) {
+				},function(data, textStatus) {
 					//alert(textStatus);
-					if(textStatus == "success") {
-						if(data.status == "-1") {
+					if (textStatus == "success") {
+						if (data.status == "-1") {
 							alert("登陆失败！");
-						} else if(data.status == "0") {
+						} else if (data.status == "0") {
 							alert("用户邮箱或密码错误！");
 						} else {
 							alert("登陆成功！");
@@ -210,10 +207,7 @@
 					}
 				}, 'json');
 			}
-			
-			
 		}
-		
 	</script>
 </body>
 </html>

@@ -15,9 +15,9 @@ public class FlowerMysqlService implements FlowerService {
 	}
 	
 	@Override
-	public Flower getFlowerInName(String flowerName) {
+	public Flower getFlowerInId(Integer flowerId) {
 		// TODO Auto-generated method stub
-		return fd.getFlowerInName(flowerName);
+		return fd.getFlowerInId(flowerId);
 	}
 
 	@Override
@@ -39,9 +39,9 @@ public class FlowerMysqlService implements FlowerService {
 	}
 
 	@Override
-	public List<Flower> getFlowers(Integer start, Integer length) {
+	public List<Flower> getFlowers(Integer start, Integer length, Integer flowerCategary) {
 		// TODO Auto-generated method stub
-		return fd.getFlowers(start, length);
+		return fd.getFlowers(start, length, flowerCategary);
 	}
 
 }

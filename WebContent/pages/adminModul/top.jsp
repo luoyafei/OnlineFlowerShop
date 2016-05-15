@@ -7,17 +7,14 @@
 				<table class="table table-condensed">
 					<thead>
 						<tr>
-						<%
-							User user;
-							if(session.getAttribute("user") != null) {
-								user = (User)session.getAttribute("user");
+						<%-- <%
+							User user = (User)session.getAttribute("user");
+							if(user != null && user.getUserRole() == 1) {
 						%>
 							<th><a><%=user.getEmail() %>,欢迎光临！</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/OnlineFlowerShop/LoginOut" style="color: red;">注销</a></th>
-							<th><a href="#">订单查询</a></th>
-						<%}else{ %>
-							<th><a href="/OnlineFlowerShop/pages/signInOut/reg.jsp">你好,请登录</a></th>
-							<th><a href="/OnlineFlowerShop/pages/signInOut/reg.jsp">注册</a></th>
-						<%} %>
+						<%}else{
+							response.sendRedirect("/OnlineFlowerShop/index.jsp");
+						} %> --%>
 							<th><a href="/OnlineFlowerShop/index.jsp">花乐园网上花店系统</a></th>
 						</tr>
 					</thead>

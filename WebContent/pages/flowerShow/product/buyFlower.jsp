@@ -56,80 +56,72 @@ $(document).ready(function() {
 *{ margin:0; padding:0; list-style:none}
 img{ border:0;}
 
+
 a:hover {color:red;text-decoration: none;}/* 鼠标指针移动到链接上 */
+
 a:active {color:#0000FF;}/* 正在被点击的链接 */
+
 </style>
 
 </head>
-<body>
-<!-- 第一行布局 -->
-	<jsp:include page="../modul/top.jsp" flush="true"></jsp:include>
-<!-- 第二行布局 -->
-	<jsp:include page="../modul/content.jsp" flush="true"></jsp:include>
 
+<body>
+
+<!-- 第一行布局 -->
+	<jsp:include page="../../modul/top.jsp" flush="true"></jsp:include>
+<!-- 第二行布局 -->
+	<jsp:include page="../../modul/content.jsp" flush="true"></jsp:include>
 <!-- 第三行布局 -->
 <hr>
-	<div class="row clearfix">
+<div class="row clearfix">
+<div class="col-md-3 column"></div>
 		<div class="col-md-2 column">
-		<img alt="140x140" src="love.jpg" />
-		 <button type="button" class="btn btn-default btn-success btn-block">爱情鲜花专区</button>
+			<img alt="140x140" src="../loveflower/001.jpg" />   <!--花朵信息动态提取-->
 		</div>
-		<div class="col-md-1 column">
-		</div>
-		<div class="col-md-8 column">
-			<table class="table" style="text-align:center">
+		<div class="col-md-3 column">
+			
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+			<table class="table table-hover">
+			
+			<tr class="success">
+				<td><font color="black" size="4">名称</font></td>
+				<td> <font color="black" size="4"> 
 				
-				<tbody>
-					<tr class="error">
-						<td style="border-left:10px solid #DDDDDD;border-right:10px solid #DDDDDD;">
-								<a href="product/001.html"><img alt="140x140" src="loveflower/001.jpg" />
-								鲜花 用心爱你<br>￥499
-								</a>
-						</td>
-						<td style="border-right:10px solid #DDDDDD;">
-								<a href="product/002.html"><img alt="140x140" src="loveflower/002.jpg" />
-								鲜花 致美丽的你<br>￥128</a>
-						</td>
-						<td style="border-right:10px solid #DDDDDD;">
-								<a href="product/002.html"><img alt="140x140" src="loveflower/003.jpg" />
-								鲜花 苏格兰风情<br>￥189</a>
-						</td>
-						<td style="border-right:10px solid #DDDDDD;">
-								<a href="product/002.html"><img alt="140x140" src="loveflower/004.jpg" />
-								鲜花 忘情巴黎<br>￥290</a>
-						</td>
-						
-					</tr>
-						<tr class="error">
-						<td style="border-left:10px solid #DDDDDD;border-right:10px solid #DDDDDD;">
-								<a href="product/002.html"><img alt="140x140" src="loveflower/005.jpg" />
-								
-								鲜花 真爱如初<br>￥196
-								</a>
-						</td>
-						<td style="border-right:10px solid #DDDDDD;">
-								<a href="product/002.html"><img alt="140x140" src="loveflower/006.jpg" />
-								鲜花 一往情深<br>￥239</a>
-						</td>
-						<td style="border-right:10px solid #DDDDDD;">
-								<a><img alt="140x140" src="loveflower/007.jpg" />
-								鲜花 爱在心头<br>￥348</a>
-						</td>
-						<td style="border-right:10px solid #DDDDDD;">
-								<a href="product/002.html"><img alt="140x140" src="loveflower/008.jpg" />
-								鲜花 用心爱你<br>￥499</a>
-						</td>
-					</tr>
-				</tbody>
+				</font></td>
+			</tr>
+			
+			<tr class="success">
+				<td><font color="black" size="4">价格</font></td>
+				<td> <font color="black" size="4"> 
+				
+				</font></td>
+			</tr>
+			
+			<tr class="info">
+				<td><font color="black" size="4">描述</font></td>
+				<td> <font color="black" size="4"> 
+				
+				</font></td>
+			</tr>	
+	
+					
 			</table>
+
+				</div>
+			</div>
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+				<br><a href="#"><button type="button" class="btn btn-success btn-lg btn-block">立即购买</button></a>
+				</div>
+			</div>
 		</div>
-		<div class="col-md-1 column">
-		</div>
-	</div>
+		<div class="col-md-4 column"></div>
+</div>
 
 
 <!-- 第四行布局 -->
-	<jsp:include page="../modul/footer.jsp" flush="true"></jsp:include>
+	<jsp:include page="../../modul/footer.jsp" flush="true"></jsp:include>
 
 <!-- 如果要使用Bootstrap的js插件，必须先调入jQuery -->
         <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
