@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.flowershop.bean.Message;
 import com.flowershop.bean.User;
 import com.flowershop.dao.UserDao;
 import com.flowershop.factory.ConnectionFactory;
@@ -15,7 +18,26 @@ public class UserMysqlDao implements UserDao{
 	@Override
 	public List<User> getAllUsers() {
 		// TODO Auto-generated method stub
-		return null;
+		List<User> users = new ArrayList<User>();
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "select userId from user";
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				User user = getUserInId(rs.getInt(1));
+				users.add(user);
+			}
+		} catch(SQLException e) {
+System.out.println("获取所有的用户出错！");
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedCSR(conn, stmt, rs);
+		}
+		
+		return users;
 	}
 
 	@Override
@@ -80,7 +102,26 @@ System.out.println("通过用户邮箱，获取用户的信息");
 	@Override
 	public boolean deleteUser(User user) {
 		// TODO Auto-generated method stub
-		return false;
+		boolean flag = false;
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "delete from user where userId = ?";
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, user.getUserId());
+			if(pstmt.executeUpdate() >= 1)
+				flag = true;
+			else
+				flag = false;
+		} catch(SQLException e) {
+System.out.println("数据库删除鲜花时出现错误！");
+			flag = false;
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedConnection(conn);
+			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+		}
+		return flag;
 	}
 
 	@Override
@@ -158,5 +199,4 @@ System.out.println("用户修改密码时，往数据库插入用户的信息时
 			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
 		}
 	}
-	
 }

@@ -8,7 +8,7 @@
 			    <li><a href="#">鲜花管理</a></li>
 			    <li><a href="#">意见反馈</a></li>
 				<li><a href="#">访问统计</a></li>
-				<li><a href="#">退出登录</a></li>
+				<li><a href="/OnlineFlowerShop/LoginOut">退出登录</a></li>
 			</ul>
 		</div>
 </div>

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.flowershop.bean.Flower;
@@ -15,7 +16,30 @@ public class FlowerMysqlDao implements FlowerDao {
 	@Override
 	public Flower getFlowerInId(Integer flowerId) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "select * from flower where flowerId = ?";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Flower flower = new Flower();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, flowerId);
+			rs = pstmt.executeQuery();
+			rs.next();
+			flower.setFlowerId(rs.getInt("flowerId"));
+			flower.setFlowerName(rs.getString("flowerName"));
+			flower.setFlowerCategary(rs.getString("flowerCategary"));
+			flower.setFlowerPicture(rs.getString("flowerPicture"));
+			flower.setFlowePrice(rs.getString("flowePrice"));
+			flower.setFlowerDescribe(rs.getString("flowerDescribe"));
+		} catch(SQLException e) {
+System.out.println("通过花朵的Id获取花朵的信息出错！");
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedCPR(conn, pstmt, rs);
+		}
+		return flower;
 	}
 
 	@Override
@@ -66,7 +90,26 @@ System.out.println("花朵插入数据库失败！");
 	@Override
 	public boolean deleteFlower(Flower flower) {
 		// TODO Auto-generated method stub
-		return false;
+		boolean flag = false;
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "delete from flower where flowerId = ?";
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, flower.getFlowerId());
+			if(pstmt.executeUpdate() >= 1)
+				flag = true;
+			else
+				flag = false;
+		} catch(SQLException e) {
+System.out.println("数据库删除鲜花时出现错误！");
+			flag = false;
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedConnection(conn);
+			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+		}
+		return flag;
 	}
 
 	@Override
@@ -81,18 +124,30 @@ System.out.println("花朵插入数据库失败！");
 		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
 		PreparedStatement pstmt = null;
 		String sql = "select flowerId from flower where flowerCategary = ? order by flowerId desc limit ?,?";
-		
+		ResultSet rs = null;
+		ArrayList<Flower> flowers = null;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, flowerCategary);
 			pstmt.setInt(2, start);
 			pstmt.setInt(3, length);
+			
+			rs = pstmt.executeQuery();
+			flowers = new ArrayList<Flower>();
+			
+			while(rs.next()) {
+				Flower flower = getFlowerInId(rs.getInt(1));
+				flowers.add(flower);
+			}
+			
+		} catch(SQLException e) {
+System.out.println("获取花朵list时出现错误！");
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedCPR(conn, pstmt, rs);
 		}
-		ResultSet rs = null;
 		
-		
-		
-		return null;
+		return flowers;
 	}
 
 }
