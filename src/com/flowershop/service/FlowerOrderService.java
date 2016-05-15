@@ -1,11 +1,12 @@
-package com.flowershop.dao;
+package com.flowershop.service;
 
 import java.util.List;
 
 import com.flowershop.bean.FlowerOrder;
 import com.flowershop.bean.User;
 
-public interface FlowerOrderDao {
+public interface FlowerOrderService {
+
 	public boolean insertOrder(FlowerOrder order);
 	public boolean deleteOrder(FlowerOrder order);
 	public boolean updateOrder(FlowerOrder order);

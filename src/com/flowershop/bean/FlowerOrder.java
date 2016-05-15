@@ -9,6 +9,7 @@ public class FlowerOrder {
 	addr varchar(255) not null,
 	status int default 0,
 	orderDate datetime default now()
+	totalPrice varchar(11)
 	*/
 	
 	private Integer orderId = 0;
@@ -16,7 +17,14 @@ public class FlowerOrder {
 	private String addr = "中国";
 	private int status = 0;
 	private Timestamp orderDate = null;
+	private String totalPrice = "0";
 	
+	public String getTotalPrice() {
+		return totalPrice;
+	}
+	public void setTotalPrice(String totalPrice) {
+		this.totalPrice = totalPrice;
+	}
 	public Integer getOrderId() {
 		return orderId;
 	}

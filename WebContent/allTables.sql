@@ -70,7 +70,7 @@ create table flowerOrderItem (
 	flowerId int references flower(flowerId),
 	unitPrice varchar(11) default '0',
 	flowerCount int default 0,
-	flowerOrderId references flowerOrder(orderId)
+	flowerOrderId int  references flowerOrder(orderId)
 );
 
 
