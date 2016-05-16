@@ -1,5 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.flowershop.factory.ServiceFactory"%>
+<%@ page import="com.flowershop.bean.*" %>    
+    
+<%
+	String flowerId = request.getParameter("flowerNumber");
+	if(flowerId == null) {
+		out.println("<script type=text/javascript>window.history.go(-1)</script>");
+		return;
+	}
+	Flower flower = ServiceFactory.createFlowerService().getFlowerInId(Integer.valueOf(flowerId));
+%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -76,7 +88,7 @@ a:active {color:#0000FF;}/* 正在被点击的链接 */
 <div class="row clearfix">
 <div class="col-md-3 column"></div>
 		<div class="col-md-2 column">
-			<img alt="140x140" src="../loveflower/001.jpg" />   <!--花朵信息动态提取-->
+			<img alt="图片加载失败！" src="/onlineFlowerShop/img/<%=flower.getFlowerPicture() %>" style="width:220px; heigth: 240px;" />   <!--花朵信息动态提取-->
 		</div>
 		<div class="col-md-3 column">
 			
@@ -87,47 +99,75 @@ a:active {color:#0000FF;}/* 正在被点击的链接 */
 			<tr class="success">
 				<td><font color="black" size="4">名称</font></td>
 				<td> <font color="black" size="4"> 
-				
+				<%=flower.getFlowerCategary()%>
 				</font></td>
 			</tr>
-			
 			<tr class="success">
 				<td><font color="black" size="4">价格</font></td>
 				<td> <font color="black" size="4"> 
-				
+				<%=flower.getFlowePrice()%>￥
 				</font></td>
 			</tr>
 			
 			<tr class="info">
 				<td><font color="black" size="4">描述</font></td>
 				<td> <font color="black" size="4"> 
-				
+				<%=flower.getFlowerDescribe()%>
 				</font></td>
-			</tr>	
-	
+			</tr>
+			
+			<tr class="info">
+				<td><font color="black" size="4">数量</font></td>
+				<td><input type="number" id="flowerCount" name="flowerCount" style="color:black;width: 80px;"/></td>
+			</tr>
 					
 			</table>
-
 				</div>
 			</div>
 			<div class="row clearfix">
 				<div class="col-md-12 column">
-				<br><a href="#"><button type="button" class="btn btn-success btn-lg btn-block">立即购买</button></a>
+					<br>
+					<button type="button" onclick="addCar()" class="btn btn-success btn-lg btn-block">加入购物车</button>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-4 column"></div>
 </div>
-
-
 <!-- 第四行布局 -->
 	<jsp:include page="../../modul/footer.jsp" flush="true"></jsp:include>
-
 <!-- 如果要使用Bootstrap的js插件，必须先调入jQuery -->
         <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
         <!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> 
 
+<script>
+	function addCar() {
+		var flowerCount = $("#flowerCount").val().trim();
+		if(flowerCount != 0 && 0 < flowerCount*1) {
+			if(100 < flowerCount*1) {
+				alert("请选择你想要买的鲜花的数量！0~99");
+				return;
+			} else {
+				$.post('/OnlineFlowerShop/AddShopCar', {
+					flowerCount : flowerCount,
+					flowerId : <%=flowerId%>
+				}, function(data, textStatus){
+					if(textStatus == "success") {
+						var result = data.status;
+						if(result == "1") {
+							alert("成功加入购物车！");
+						} else {
+							alert("加入失败！请先进行登录操作！");
+						}
+					}
+				}, 'json');
+			}
+		} else {
+			alert("请选择你想要买的鲜花的数量！0~99");
+			return;
+		}
+	}
+</script>
 
 </body>
 </html>

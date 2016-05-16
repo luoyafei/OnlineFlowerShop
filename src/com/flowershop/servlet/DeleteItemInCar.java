@@ -9,17 +9,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.flowershop.bean.FlowerOrderItem;
+import com.flowershop.service.ShopCarService;
+import com.flowershop.serviceimp.ShopCarMysqlService;
+
 /**
- * Servlet implementation class LoginOut
+ * Servlet implementation class DeleteItemInCar
  */
-@WebServlet("/LoginOut")
-public class LoginOut extends HttpServlet {
+@WebServlet("/DeleteItemInCar")
+public class DeleteItemInCar extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginOut() {
+    public DeleteItemInCar() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,12 +36,17 @@ public class LoginOut extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		
-		HttpSession session = request.getSession(false);
-		if(session != null) {
-			session.removeAttribute("user");
-			session.removeAttribute("car");
-		}
-		response.sendRedirect("/OnlineFlowerShop/pages/main/main.jsp");
+		String flowerId = request.getParameter("item");
+//System.out.println("Delete :" + flowerId);
+		HttpSession session = request.getSession();
+		ShopCarService car = (ShopCarMysqlService)session.getAttribute("car");
+		FlowerOrderItem item = new FlowerOrderItem();
+		item.setFlowerId(Integer.valueOf(flowerId));
+		
+		car.deleteOrderItem(item);
+		
+		response.sendRedirect("/OnlineFlowerShop/pages/myorder/myorder.jsp");
+		return;
 		
 	}
 

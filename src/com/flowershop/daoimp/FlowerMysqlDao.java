@@ -149,5 +149,32 @@ System.out.println("获取花朵list时出现错误！");
 		
 		return flowers;
 	}
+	
+	@Override
+	public List<Flower> getFlowers(Integer flowerCategary) {
+		// TODO Auto-generated method stub
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		PreparedStatement pstmt = null;
+		String sql = "select count(*) from flower where flowerCategary = ?";
+		ResultSet rs = null;
+		List<Flower> flowers = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, flowerCategary);
+			rs = pstmt.executeQuery();
+			rs.next();
+			Integer count = rs.getInt(1);
+			
+			flowers = getFlowers(0, count, flowerCategary);
+			
+		} catch(SQLException e) {
+System.out.println("获取花朵list时出现错误！");
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedCPR(conn, pstmt, rs);
+		}
+		
+		return flowers;
+	}
 
 }

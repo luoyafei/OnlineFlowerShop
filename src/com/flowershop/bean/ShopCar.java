@@ -4,14 +4,15 @@ import java.util.List;
 
 public class ShopCar {
 
-	private String totalPrice = "0";
+	private Integer userId = 0;
 	private List<FlowerOrderItem> items = null;
 	
-	public String getTotalPrice() {
-		return totalPrice;
+
+	public Integer getUserId() {
+		return userId;
 	}
-	public void setTotalPrice(String totalPrice) {
-		this.totalPrice = totalPrice;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 	public List<FlowerOrderItem> getItems() {
 		return items;

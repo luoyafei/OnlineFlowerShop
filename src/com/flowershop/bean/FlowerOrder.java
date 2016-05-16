@@ -1,6 +1,6 @@
 package com.flowershop.bean;
 
-import com.sun.jmx.snmp.Timestamp;
+import java.sql.Timestamp;
 
 public class FlowerOrder {
 /*

@@ -4,11 +4,13 @@ import com.flowershop.service.FlowerOrderItemService;
 import com.flowershop.service.FlowerOrderService;
 import com.flowershop.service.FlowerService;
 import com.flowershop.service.MessageService;
+import com.flowershop.service.ShopCarService;
 import com.flowershop.service.UserService;
 import com.flowershop.serviceimp.FlowerMysqlService;
 import com.flowershop.serviceimp.FlowerOrderItemMysqlService;
 import com.flowershop.serviceimp.FlowerOrderMysqlService;
 import com.flowershop.serviceimp.MessageMysqlService;
+import com.flowershop.serviceimp.ShopCarMysqlService;
 import com.flowershop.serviceimp.UserMysqlService;
 
 public class ServiceFactory {
@@ -31,5 +33,9 @@ public class ServiceFactory {
 	
 	public static FlowerOrderItemService createOrderItemService() {
 		return new FlowerOrderItemMysqlService();
+	}
+	
+	public static ShopCarService createShopCarService() {
+		return new ShopCarMysqlService();
 	}
 }

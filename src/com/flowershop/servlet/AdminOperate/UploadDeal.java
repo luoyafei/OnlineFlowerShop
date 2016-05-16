@@ -50,7 +50,7 @@ public class UploadDeal extends HttpServlet {
 		Flower flower = new Flower();
 		
 		flower.setFlowerDescribe(description);
-		flower.setFlowerPicture(price);
+		flower.setFlowePrice(price);
 		flower.setFlowerCategary(flowerCategary);
 		flower.setFlowerPicture(flowerPicture);
 		

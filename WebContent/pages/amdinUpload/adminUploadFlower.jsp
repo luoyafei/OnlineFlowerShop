@@ -45,7 +45,7 @@
 $(document).ready(function() {	
 
 	jQuery.jqsxfg51nav = function(jqsxfg51navhover) {
-		$(jqsxfg51navhover).prepend("<span></span>"); //懒人建站 http://www.51xuediannao.com/
+		$(jqsxfg51navhover).prepend("<span></span>");
 		
 		$(jqsxfg51navhover).each(function() { 
 			var linkText = $(this).find("a").html(); 
@@ -150,10 +150,10 @@ a:active {color:#0000FF;}/* 正在被点击的链接 */
 						    <input type="radio" name="flowerCategary" id="flowerCategary1" value="0" autocomplete="off" checked>爱情鲜花
 						  </label>
 						  <label class="btn btn-primary">
-						    <input type="radio" name="flowerCategary" id="flowerCategary2" value="1" autocomplete="off">友情鲜花
+						    <input type="radio" name="flowerCategary" id="flowerCategary2" value="1" autocomplete="off">亲情鲜花
 						  </label>
 						  <label class="btn btn-primary">
-						    <input type="radio" name="flowerCategary" id="flowerCategary3" value="2" autocomplete="off">亲情鲜花
+						    <input type="radio" name="flowerCategary" id="flowerCategary3" value="2" autocomplete="off">友情鲜花
 						  </label>
 						</div>
 					</div>

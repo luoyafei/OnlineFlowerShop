@@ -11,6 +11,7 @@
 					user = (User)session.getAttribute("user");
 			%>
 				<li><a href="/OnlineFlowerShop/pages/modifyUserInfo/modifyUserInfo.jsp">个人信息</a></li>
+				<li><a href="/OnlineFlowerShop/pages/myorder/myorder.jsp">我的购物车</a></li>
 			<%}%>
 			
 			

@@ -43,5 +43,11 @@ public class FlowerMysqlService implements FlowerService {
 		// TODO Auto-generated method stub
 		return fd.getFlowers(start, length, flowerCategary);
 	}
+	
+	@Override
+	public List<Flower> getFlowers(Integer flowerCategary) {
+		// TODO Auto-generated method stub
+		return fd.getFlowers(flowerCategary);
+	}
 
 }

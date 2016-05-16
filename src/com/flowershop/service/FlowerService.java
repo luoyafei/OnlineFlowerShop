@@ -10,4 +10,5 @@ public interface FlowerService {
 	public boolean deleteFlower(Flower flower);
 	public boolean updateFlower(Flower flower);
 	public List<Flower> getFlowers(Integer start, Integer length, Integer flowerCategaroy);
+	public List<Flower> getFlowers(Integer flowerCategaroy);
 }

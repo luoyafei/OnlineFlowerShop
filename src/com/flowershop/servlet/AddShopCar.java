@@ -10,22 +10,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.flowershop.bean.FlowerOrderItem;
 import com.flowershop.bean.User;
 import com.flowershop.factory.ServiceFactory;
 import com.flowershop.service.ShopCarService;
 import com.flowershop.serviceimp.ShopCarMysqlService;
 
 /**
- * Servlet implementation class LoginIn
+ * Servlet implementation class AddShopCar
  */
-@WebServlet("/LoginIn")
-public class LoginIn extends HttpServlet {
+@WebServlet("/AddShopCar")
+public class AddShopCar extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginIn() {
+    public AddShopCar() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,52 +38,32 @@ public class LoginIn extends HttpServlet {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		
 		PrintWriter out = response.getWriter();
 		
 		/**
-		 * 获取从前台传来的数据
+		 * -1,失败;0,未登录;1,成功;
 		 * */
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		
-		User user = new User();
-		
 		Integer status = -1;
-		boolean flag = false;
-		/**
-		 * 先通过服务大工厂生产出用户服务，通过用户服务调用验证用户邮箱是否存在的方法！
-		 * */
-		if(!ServiceFactory.createUserService().validateUserName(email)) {
-			/**
-			 * 如果为存在的邮箱，则通过邮箱名，调用用户服务的getUserInName(User user)方法获取到整个user的Bean!
-			 * */
-			user = ServiceFactory.createUserService().getUserInName(email);
-			if(user.getUserPassword().equals(password)) {
-				/**
-				 * 获取到整个user的Bean后获取到密码与从前台传来的密码对比，如果一致，则登陆成功，反之则失败！
-				 * */
-				flag = true;
-			} else {
-				status = 0;
-			}
-		} else
-			status = 0;
 		
-		if(flag) {
-			/**
-			 * 如果登陆成功，则将用户的Bean保存如session
-			 * */
-			status = 1;
-			HttpSession session = request.getSession();
-			session.setAttribute("user", user);
-			ShopCarService car = new ShopCarMysqlService();
-			session.setAttribute("car", car);
+		String flowerId = request.getParameter("flowerId");
+		String flowerCount = request.getParameter("flowerCount");
+		HttpSession session = request.getSession();
+		User user = (User)session.getAttribute("user");
+		ShopCarService car = (ShopCarMysqlService)session.getAttribute("car");
+		if(session != null && user != null) {
+			
+			car.setUserId(user.getUserId());
+			FlowerOrderItem item = new FlowerOrderItem();
+			item.setFlowerId(Integer.valueOf(flowerId));
+			item.setUnitPrice(ServiceFactory.createFlowerService().getFlowerInId(Integer.valueOf(flowerId)).getFlowePrice());
+			item.setFlowerCount(Integer.valueOf(flowerCount));
+			
+			if(car.addOrderItem(item))
+				status = 1;
+			else
+				status = 0;
 		}
-
-		/**
-		 * 手动拼接json的字符串，然后发送往前台！
-		 * */
+		
 		String str = "{\"" + "status" + "\":\"" + status + "\"}";
 		out.print(str);
 		out.flush();

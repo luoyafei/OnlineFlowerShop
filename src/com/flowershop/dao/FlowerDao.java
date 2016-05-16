@@ -10,4 +10,5 @@ public interface FlowerDao {
 	public boolean deleteFlower(Flower flower);
 	public boolean updateFlower(Flower flower);
 	public List<Flower> getFlowers(Integer start, Integer length, Integer flowerCategary);
+	public List<Flower> getFlowers(Integer flowerCategary);
 }

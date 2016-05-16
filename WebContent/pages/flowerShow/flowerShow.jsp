@@ -1,5 +1,23 @@
+<%@page import="com.flowershop.factory.ServiceFactory"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<%@ page import="com.flowershop.bean.*" %>
+   <%
+   		String flag = request.getParameter("flowerId");
+   		if(flag == null) {
+   			response.sendRedirect("/OnlineFlowerShop/pages/main/main.jsp");
+   			return;
+   		}
+   		
+   		Integer allItems = ServiceFactory.createFlowerService().getFlowers(Integer.valueOf(flag)).size();
+   		Integer start = 0;
+   		if(allItems > 7) {
+   			Random rd = new Random();
+   	   		start = rd.nextInt(allItems-7);
+   		}
+   		List<Flower> flowers = ServiceFactory.createFlowerService().getFlowers(start, 8, Integer.parseInt(flag));
+   %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -27,10 +45,18 @@
 <script src="http://lib.sinaapp.com/js/jquery/1.4.1/jquery.min.js" type="text/javascript"></script>
 
 <SCRIPT type=text/javascript>
-$(document).ready(function() {	
-
+$(document).ready(function() {
+	var flag = <%=flag%>;
+	if(flag == "1") {
+		$("#imgLove").attr("src", "love/familylove.jpg");
+		$("#loveText").text("亲情鲜花专区");
+	} else if(flag == "2") {
+		$("#imgLove").attr("src", "love/friendlove.jpg");
+		$("#loveText").text("友情鲜花专区");
+	}
+		
 	jQuery.jqsxfg51nav = function(jqsxfg51navhover) {
-		$(jqsxfg51navhover).prepend("<span></span>"); //懒人建站 http://www.51xuediannao.com/
+		$(jqsxfg51navhover).prepend("<span></span>");
 		
 		$(jqsxfg51navhover).each(function() { 
 			var linkText = $(this).find("a").html(); 
@@ -68,11 +94,12 @@ a:active {color:#0000FF;}/* 正在被点击的链接 */
 	<jsp:include page="../modul/content.jsp" flush="true"></jsp:include>
 
 <!-- 第三行布局 -->
+
 <hr>
 	<div class="row clearfix">
 		<div class="col-md-2 column">
-		<img alt="140x140" src="love.jpg" />
-		 <button type="button" class="btn btn-default btn-success btn-block">爱情鲜花专区</button>
+		<img alt="140x140" id="imgLove" src='love/love.jpg' />
+		 <button type="button" class="btn btn-default btn-success btn-block" id="loveText">爱情鲜花专区</button>
 		</div>
 		<div class="col-md-1 column">
 		</div>
@@ -81,52 +108,64 @@ a:active {color:#0000FF;}/* 正在被点击的链接 */
 				
 				<tbody>
 					<tr class="error">
-						<td style="border-left:10px solid #DDDDDD;border-right:10px solid #DDDDDD;">
-								<a href="product/001.html"><img alt="140x140" src="loveflower/001.jpg" />
-								鲜花 用心爱你<br>￥499
-								</a>
-						</td>
-						<td style="border-right:10px solid #DDDDDD;">
-								<a href="product/002.html"><img alt="140x140" src="loveflower/002.jpg" />
-								鲜花 致美丽的你<br>￥128</a>
-						</td>
-						<td style="border-right:10px solid #DDDDDD;">
-								<a href="product/002.html"><img alt="140x140" src="loveflower/003.jpg" />
-								鲜花 苏格兰风情<br>￥189</a>
-						</td>
-						<td style="border-right:10px solid #DDDDDD;">
-								<a href="product/002.html"><img alt="140x140" src="loveflower/004.jpg" />
-								鲜花 忘情巴黎<br>￥290</a>
-						</td>
+					
+					<%
+						Integer flowerNum = 0;
+						if(flowers.size() > 4)
+							flowerNum = 4;
+						else
+							flowerNum = flowers.size();
+						
+						for(int i = 0; i < flowerNum; i++) {
+							Flower flower = flowers.get(i);
+					%>
+					
+					<td style="border-left:10px solid #DDDDDD;border-right:10px solid #DDDDDD;">
+						<a href="product/buyFlower.jsp?flowerNumber=<%=flower.getFlowerId() %>"><img alt="图片加载失败" style="width: 220px;height: 240px;" src="/onlineFlowerShop/img/<%=flower.getFlowerPicture() %>" />
+						<%=flower.getFlowerDescribe() %>
+						<br>
+						<%=flower.getFlowePrice() %>￥
+						</a>
+					</td>
+					<%
+						}
+					%>
 						
 					</tr>
 						<tr class="error">
-						<td style="border-left:10px solid #DDDDDD;border-right:10px solid #DDDDDD;">
-								<a href="product/002.html"><img alt="140x140" src="loveflower/005.jpg" />
-								
-								鲜花 真爱如初<br>￥196
+						<%
+							Integer otherFlowerNum = flowers.size() - flowerNum;
+							if(otherFlowerNum > 0) {
+								for(int i = 4; i < flowers.size(); i++) {
+									Flower flower = flowers.get(i);
+									
+						%>
+							
+							<td style="border-left:10px solid #DDDDDD;border-right:10px solid #DDDDDD;">
+								<a href="product/buyFlower.jsp?flowerNumber=<%=flower.getFlowerId() %>"><img alt="图片加载失败" style="width: 220px;height: 240px;" src="/onlineFlowerShop/img/<%=flower.getFlowerPicture() %>" />
+								<%=flower.getFlowerDescribe() %>
+								<br>
+								<%=flower.getFlowePrice() %>￥
 								</a>
-						</td>
-						<td style="border-right:10px solid #DDDDDD;">
-								<a href="product/002.html"><img alt="140x140" src="loveflower/006.jpg" />
-								鲜花 一往情深<br>￥239</a>
-						</td>
-						<td style="border-right:10px solid #DDDDDD;">
-								<a><img alt="140x140" src="loveflower/007.jpg" />
-								鲜花 爱在心头<br>￥348</a>
-						</td>
-						<td style="border-right:10px solid #DDDDDD;">
-								<a href="product/002.html"><img alt="140x140" src="loveflower/008.jpg" />
-								鲜花 用心爱你<br>￥499</a>
-						</td>
+							</td>
+						<%
+								}
+							}
+						%>
+						
 					</tr>
 				</tbody>
+				<button class="btn btn-default" onclick="freshFlower()" ><img src="images/refresh.png"/></button>
 			</table>
 		</div>
 		<div class="col-md-1 column">
 		</div>
 	</div>
-
+<script>
+	function freshFlower() {
+		window.location.reload();
+	}
+</script>
 
 <!-- 第四行布局 -->
 	<jsp:include page="../modul/footer.jsp" flush="true"></jsp:include>
@@ -135,7 +174,6 @@ a:active {color:#0000FF;}/* 正在被点击的链接 */
         <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
         <!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> 
-
 
 </body>
 </html>
