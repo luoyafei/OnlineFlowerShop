@@ -4,44 +4,45 @@ import java.util.List;
 
 import com.flowershop.bean.FlowerOrder;
 import com.flowershop.bean.User;
-import com.flowershop.factory.ServiceFactory;
+import com.flowershop.dao.FlowerOrderDao;
+import com.flowershop.factory.DaoFactory;
 import com.flowershop.service.FlowerOrderService;
 
 public class FlowerOrderMysqlService implements FlowerOrderService {
 
-	private FlowerOrderService fos = null;
+	private FlowerOrderDao fod;
 	
 	public FlowerOrderMysqlService() {
-		fos = ServiceFactory.createOrderService();
+		fod = DaoFactory.createFlowerOrderDao();
 	}
 	@Override
-	public boolean insertOrder(FlowerOrder order) {
+	public Integer insertOrder(FlowerOrder order) {
 		// TODO Auto-generated method stub
-		return fos.insertOrder(order);
+		return fod.insertOrder(order);
 	}
 
 	@Override
 	public boolean deleteOrder(FlowerOrder order) {
 		// TODO Auto-generated method stub
-		return fos.deleteOrder(order);
+		return fod.deleteOrder(order);
 	}
 
 	@Override
 	public boolean updateOrder(FlowerOrder order) {
 		// TODO Auto-generated method stub
-		return fos.updateOrder(order);
+		return fod.updateOrder(order);
 	}
 
 	@Override
 	public FlowerOrder getFlowerOrderInOrderId(FlowerOrder order) {
 		// TODO Auto-generated method stub
-		return fos.getFlowerOrderInOrderId(order);
+		return fod.getFlowerOrderInOrderId(order);
 	}
 
 	@Override
 	public List<FlowerOrder> getFlowerOrders(User user) {
 		// TODO Auto-generated method stub
-		return fos.getFlowerOrders(user);
+		return fod.getFlowerOrders(user);
 	}
 
 }

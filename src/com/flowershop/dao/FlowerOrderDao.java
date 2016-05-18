@@ -6,7 +6,7 @@ import com.flowershop.bean.FlowerOrder;
 import com.flowershop.bean.User;
 
 public interface FlowerOrderDao {
-	public boolean insertOrder(FlowerOrder order);
+	public Integer insertOrder(FlowerOrder order);
 	public boolean deleteOrder(FlowerOrder order);
 	public boolean updateOrder(FlowerOrder order);
 	public FlowerOrder getFlowerOrderInOrderId(FlowerOrder order);

@@ -12,11 +12,12 @@ import com.flowershop.bean.FlowerOrder;
 import com.flowershop.bean.User;
 import com.flowershop.dao.FlowerOrderDao;
 import com.flowershop.factory.ConnectionFactory;
+import com.mysql.jdbc.Statement;
 
 public class FlowerOrderMysqlDao implements FlowerOrderDao {
 
 	@Override
-	public boolean insertOrder(FlowerOrder order) {
+	public Integer insertOrder(FlowerOrder order) {
 		
 		/**
 		 * mysql> desc flowerOrder;
@@ -36,25 +37,29 @@ public class FlowerOrderMysqlDao implements FlowerOrderDao {
 		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
 		String sql = "insert into flowerOrder() values(null, ?, ?, ?, now(), ?)";
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Integer orderId = -1;
 		try {
-			pstmt = conn.prepareStatement(sql);
+			pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, order.getUserId());
 			pstmt.setString(2, order.getAddr());
 			pstmt.setInt(3,  order.getStatus());
 			pstmt.setString(4, order.getTotalPrice());
 			
-			if(pstmt.executeUpdate() >= 1)
-				return true;
-			else
-				return false;
+			if(pstmt.executeUpdate() >= 1) {
+				rs = pstmt.getGeneratedKeys();
+				rs.next();
+				orderId = rs.getInt(1);
+			}
+			
 		} catch(SQLException e) {
 System.out.println("用户提交订单时，往数据库插入订单的信息时出错！");
 			e.printStackTrace();
-			return false;
+			orderId = -1;
 		} finally {
-			ConnectionFactory.newMysqlInstance().closedConnection(conn);
-			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+			ConnectionFactory.newMysqlInstance().closedCPR(conn, pstmt, rs);
 		}
+		return orderId;
 	}
 
 	@Override
@@ -64,21 +69,25 @@ System.out.println("用户提交订单时，往数据库插入订单的信息时
 		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
 		String sql = "delete from flowerOrder where orderId = ?";
 		PreparedStatement pstmt = null;
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, order.getOrderId());
-			if(pstmt.executeUpdate() >= 1)
-				flag = true;
-			else
+		
+		if(new FlowerOrderItemMysqlDao().deleteOrderItemsInFlowerOrderId(order.getOrderId())) {
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, order.getOrderId());
+				if(pstmt.executeUpdate() >= 1)
+					flag = true;
+				else
+					flag = false;
+			} catch(SQLException e) {
+	System.out.println("数据库删除订单时出现错误！");
 				flag = false;
-		} catch(SQLException e) {
-System.out.println("数据库删除订单时出现错误！");
-			flag = false;
-			e.printStackTrace();
-		} finally {
-			ConnectionFactory.newMysqlInstance().closedConnection(conn);
-			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+				e.printStackTrace();
+			} finally {
+				ConnectionFactory.newMysqlInstance().closedConnection(conn);
+				ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+			}
 		}
+		
 		return flag;
 	}
 
@@ -92,7 +101,7 @@ System.out.println("数据库删除订单时出现错误！");
 	public FlowerOrder getFlowerOrderInOrderId(FlowerOrder order) {
 		// TODO Auto-generated method stub
 		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
-		String sql = "select * from order where orderId = ?";
+		String sql = "select * from flowerorder where orderId = ?";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		FlowerOrder fo = new FlowerOrder();
@@ -100,13 +109,13 @@ System.out.println("数据库删除订单时出现错误！");
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, order.getOrderId());
 			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				order.setOrderId(rs.getInt("orderId"));
-				order.setUserId(rs.getInt("userId"));
-				order.setAddr(rs.getString("addr"));
-				order.setStatus(rs.getInt("status"));
-				order.setOrderDate(rs.getTimestamp("orderDate"));
-				order.setTotalPrice(rs.getString("totalPrice"));
+			while(rs.next()) {
+				fo.setOrderId(rs.getInt("orderId"));
+				fo.setUserId(rs.getInt("userId"));
+				fo.setAddr(rs.getString("addr"));
+				fo.setStatus(rs.getInt("status"));
+				fo.setOrderDate(rs.getTimestamp("orderDate"));
+				fo.setTotalPrice(rs.getString("totalPrice"));
 				
 				/**
 				 * +------------+--------------+------+-----+-------------------+----------------+
@@ -125,8 +134,7 @@ System.out.println("通过订单的Id获取用户信息");
 			e.printStackTrace();
 			return null;
 		} finally {
-			ConnectionFactory.newMysqlInstance().closedConnection(conn);
-			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+			ConnectionFactory.newMysqlInstance().closedCPR(conn, pstmt, rs);
 		}
 		return fo;
 	}
@@ -147,11 +155,10 @@ System.out.println("通过订单的Id获取用户信息");
 			orders = new ArrayList<FlowerOrder>();
 			while(rs.next()) {
 				FlowerOrder fo = new FlowerOrder();
-				fo.setUserId(rs.getInt(1));
+				fo.setOrderId(rs.getInt(1));
 				FlowerOrder flowerorder = getFlowerOrderInOrderId(fo);
 				orders.add(flowerorder);
 			}
-			
 		} catch(SQLException e) {
 System.out.println("获取某个用户的所有的订单list时出现错误！");
 			e.printStackTrace();

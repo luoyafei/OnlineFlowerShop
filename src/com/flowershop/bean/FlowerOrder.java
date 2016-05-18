@@ -3,19 +3,11 @@ package com.flowershop.bean;
 import java.sql.Timestamp;
 
 public class FlowerOrder {
-/*
-	orderId int primary key auto_increment,
-	userId int references user(userId),
-	addr varchar(255) not null,
-	status int default 0,
-	orderDate datetime default now()
-	totalPrice varchar(11)
-	*/
 	
 	private Integer orderId = 0;
 	private Integer userId;
 	private String addr = "中国";
-	private int status = 0;
+	private int status = 0;//0:处理中；1：订单成功；2：订单失败；
 	private Timestamp orderDate = null;
 	private String totalPrice = "0";
 	
@@ -43,7 +35,7 @@ public class FlowerOrder {
 	public void setAddr(String addr) {
 		this.addr = addr;
 	}
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 	public void setStatus(int status) {

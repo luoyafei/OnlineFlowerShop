@@ -114,7 +114,7 @@ System.out.println("通过用户邮箱，获取用户的信息");
 			else
 				flag = false;
 		} catch(SQLException e) {
-System.out.println("数据库删除鲜花时出现错误！");
+System.out.println("数据库删除用户时出现错误！");
 			flag = false;
 			e.printStackTrace();
 		} finally {

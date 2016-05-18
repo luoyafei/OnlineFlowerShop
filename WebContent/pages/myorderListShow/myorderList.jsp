@@ -2,12 +2,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
-<%@ page import="com.flowershop.serviceimp.ShopCarMysqlService" %>
 <%@ page import="com.flowershop.bean.*" %>
-<%@page import="com.flowershop.service.ShopCarService"%>
 <%
-		ShopCarService car = (ShopCarMysqlService)session.getAttribute("car");
 		User user = (User)session.getAttribute("user");
+		if(user == null) {
+			response.sendRedirect("/OnlineFlowerShop/pages/main/main.jsp");
+			return;
+		}
+		
+		if(request.getParameter("ok")!=null) {
+			String ok = request.getParameter("ok");
+			if(ok.equals("0")) {
+				out.print("<script type=text/javascript>alert('删除成功！');</script>");
+			} else if(ok.equals("1")) {
+				out.print("<script type=text/javascript>alert('删除失败!');</script>");
+			}
+				
+		}
+		
+		List<FlowerOrder> orders = ServiceFactory.createOrderService().getFlowerOrders(user);
+		
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -36,7 +50,7 @@
 	$(document).ready(function() {
 
 		jQuery.jqsxfg51nav = function(jqsxfg51navhover) {
-			$(jqsxfg51navhover).prepend("<span></span>"); //懒人建站 http://www.51xuediannao.com/
+			$(jqsxfg51navhover).prepend("<span></span>");
 
 			$(jqsxfg51navhover).each(function() {
 				var linkText = $(this).find("a").html();
@@ -155,55 +169,73 @@ img {
 		<jsp:include page="../modul/content.jsp" flush="true"></jsp:include>
 
 	<!-- 第三行布局 -->
+	
+		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 		
-		<div class="bs-example" style="color:black;">
-		    <table class="table table-hover">
-		      <thead>
-		        <tr>
-		          <th>鲜花</th>
-		          <th>种类</th>
-		          <th>描述</th>
-		          <th>单价</th>
-		          <th>个数</th>
-		          <th>操作</th>
-		        </tr>
-		      </thead>
-		      <tbody>
-		        
-		        <%
-				if(car != null) {
-					List<FlowerOrderItem> items = car.getOrderItems();
-					for(int i = 0; i < items.size(); i++) {
-						FlowerOrderItem item = items.get(i);
-						Flower flower = ServiceFactory.createFlowerService().getFlowerInId(item.getFlowerId());
-		        %>
-		        <tr>
-		          <td><img alt="图片加载失败！" src="/onlineFlowerShop/img/<%=flower.getFlowerPicture() %>" style="width:60px; heigth: 70px;" /> </td>
-		          <td><%=flower.getFlowerCategary()%></td>
-		          <td><%=flower.getFlowerDescribe()%></td>
-		          <td><%=flower.getFlowePrice()%>￥</td>
-		          <td><%=item.getFlowerCount()%></td>
-		          <td><a href="/OnlineFlowerShop/DeleteItemInCar?item=<%=flower.getFlowerId()%>">删除</a></td>
-		        </tr>
-		         <%
-			         	}
-				%>
-					<tr>
-		           		<td style="text-align: right;">收货地址：</td>
-		           		<td colspan="4"><input type="text" maxlength="30" name="addr" id="addr" style="width: 300px;" /></td>
-		           		<td style="font-family: serif;color:red;font-weight: 900;" class="total">总计：<%=car.getTotalPrice() %>￥</td>
-		           	</tr>
-				<%
-					}
-		        %>
-		        
-		       
-		      </tbody>
-		    </table>
-		    <button class="btn btn-lg btn-primary btn-block" onclick="submitOrder()">确认提交订单</button>
+		<%
+			for(int i = 0; i < orders.size(); i++) {
+				FlowerOrder order = orders.get(i);
+		%>
+		
+		  <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingOne<%=i%>">
+		      <h4 class="panel-title">
+		        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne<%=i%>" aria-expanded="true" aria-controls="collapseOne<%=i%>">
+		          	<div class="row">
+					  <div class="col-sm-1">订单号:<%=order.getOrderId() %></div>
+					  <div class="col-sm-2" style="color: red;">总价:<%=order.getTotalPrice()%>￥</div>
+					  <div class="col-sm-3">地址:<%=order.getAddr() %></div>
+					  <div class="col-sm-3">日期:<span><%=order.getOrderDate().substring(0, order.getOrderDate().indexOf(".")) %></span></div>
+					  <div class="col-sm-2">订单状态:<%=order.getStatus()==0?"处理中":(order.getStatus()==1?"订单成功":"订单失败")%></div>
+					  <div class="col-sm-1"><a class="btn btn-xs btn-danger" href="/OnlineFlowerShop/DeleteOrder?item=<%=order.getOrderId() %>">删除</a></div>
+					</div>
+		        </a>
+		      </h4>
+		    </div>
+		    <div id="collapseOne<%=i%>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne<%=i%>">
+		      <div class="panel-body">
+		        <div class="bs-example" style="color:black;">
+				    <table class="table table-hover">
+				      <thead>
+				        <tr>
+				          <th>鲜花</th>
+				          <th>种类</th>
+				          <th>描述</th>
+				          <th>单价</th>
+				          <th>个数</th>
+				        </tr>
+				      </thead>
+				      <tbody>
+				        
+				 		<%
+							List<FlowerOrderItem> items = ServiceFactory.createOrderItemService().getOrderItemsInFlowerOrderId(order.getOrderId());
+							for(int j = 0; j < items.size(); j++) {
+								FlowerOrderItem item = items.get(j);
+								Flower flower = ServiceFactory.createFlowerService().getFlowerInId(item.getFlowerId());
+				        %>
+				        <tr>
+				          <td><img alt="图片加载失败！" src="/onlineFlowerShop/img/<%=flower.getFlowerPicture() %>" style="width:60px; heigth: 70px;" /> </td>
+				          <td><%=flower.getFlowerCategary()%></td>
+				          <td><%=flower.getFlowerDescribe()%></td>
+				          <td><%=flower.getFlowePrice()%>￥</td>
+				          <td><%=item.getFlowerCount()%></td>
+				        </tr>
+				         <%
+					         	}
+				        %>
+				       
+				      </tbody>
+				    </table>
+				  </div>
+		      </div>
+		    </div>
 		  </div>
-
-
+		  
+		  <%
+			}
+		  %>
+		  </div>
+		  
 	<!-- 第四行布局 -->
 	<jsp:include page="../modul/footer.jsp" flush="true"></jsp:include>
 
@@ -211,30 +243,5 @@ img {
 	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 	<!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	
-	<script>
-		function submitOrder() {
-			var addr = $("#addr").val().trim();
-			if(addr == "" || addr == undefined) {
-				alert("请填写您的收获地址！");
-			} else {
-				$.post('/OnlineFlowerShop/SubmitOrder', {
-					addr : addr
-				}, function(data, textStatus){
-					if(textStatus == "success") {
-						var result = data.status;
-						if(result == "1") {
-							alert("订单成功！");
-							window.location.reload();
-						} else {
-							alert("订单失败！");
-						}
-					}
-				}, 'json');
-			}
-			
-		}
-	</script>
-	
 </body>
 </html>

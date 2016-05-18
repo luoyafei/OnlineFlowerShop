@@ -7,7 +7,7 @@ import com.flowershop.bean.User;
 
 public interface FlowerOrderService {
 
-	public boolean insertOrder(FlowerOrder order);
+	public Integer insertOrder(FlowerOrder order);
 	public boolean deleteOrder(FlowerOrder order);
 	public boolean updateOrder(FlowerOrder order);
 	public FlowerOrder getFlowerOrderInOrderId(FlowerOrder order);

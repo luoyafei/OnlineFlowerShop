@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.flowershop.bean.FlowerOrderItem;
 import com.flowershop.dao.FlowerOrderItemDao;
@@ -50,6 +52,35 @@ System.out.println("用户购物时，往数据库插入订单Item的信息是�
 	}
 
 	@Override
+	public List<FlowerOrderItem> getOrderItemsInFlowerOrderId(Integer flowerOrderId) {
+		// TODO Auto-generated method stub
+		
+		List<FlowerOrderItem> items = null;
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "select ItemId from flowerOrderItem where flowerOrderId = ? order by ItemId desc";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, flowerOrderId);
+			rs = pstmt.executeQuery();
+			items = new ArrayList<FlowerOrderItem>();
+			while(rs.next()) {
+				FlowerOrderItem temp = new FlowerOrderItem();
+				temp.setItemId(rs.getInt(1));
+				FlowerOrderItem item = getOrderItemInOrderItemId(temp);
+				items.add(item);
+			}
+		} catch(SQLException e) {
+System.out.println("通过订单Id获取该订单下所有的订单Item的信息出错！");
+				e.printStackTrace();
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedCPR(conn, pstmt, rs);
+		}
+		return items;
+	}
+
+	@Override
 	public boolean deleteOrderItem(FlowerOrderItem orderitem) {
 		// TODO Auto-generated method stub
 		boolean flag = false;
@@ -65,6 +96,34 @@ System.out.println("用户购物时，往数据库插入订单Item的信息是�
 				flag = false;
 		} catch(SQLException e) {
 System.out.println("数据库删除订单Item时出现错误！");
+			flag = false;
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedConnection(conn);
+			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+		}
+		return flag;
+	}
+
+	
+	
+	
+	@Override
+	public boolean deleteOrderItemsInFlowerOrderId(Integer flowerOrderId) {
+		// TODO Auto-generated method stub
+		boolean flag = false;
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "delete from flowerOrderItem where flowerOrderId = ?";
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, flowerOrderId);
+			if(pstmt.executeUpdate() >= 1)
+				flag = true;
+			else
+				flag = false;
+		} catch(SQLException e) {
+System.out.println("数据库通过订单Id 删除该订单下的所有Items时出现错误！");
 			flag = false;
 			e.printStackTrace();
 		} finally {

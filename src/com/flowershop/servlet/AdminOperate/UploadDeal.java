@@ -63,10 +63,10 @@ System.out.println("上传图片成功！");
 			} else {
 System.out.println("上传图片出现错误！上传图片失败！");
 			}
-			response.sendRedirect("/OnlineFlowerShop/pages/amdinUpload/adminUploadFlower.jsp?flag=0");
+			response.sendRedirect("/OnlineFlowerShop/pages/amdinOperate/adminUploadFlower.jsp?flag=0");
 			return;
 		} else {
-			response.sendRedirect("/OnlineFlowerShop/pages/amdinUpload/adminUploadFlower.jsp?flag=1");
+			response.sendRedirect("/OnlineFlowerShop/pages/amdinOperate/adminUploadFlower.jsp?flag=1");
 			return;
 		}
 		

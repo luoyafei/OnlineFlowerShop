@@ -20,14 +20,15 @@ public class Flower {
 		this.flowerName = flowerName;
 	}
 	public String getFlowerCategary() {
-		if(Integer.valueOf(flowerCategary) == 0)
+		return flowerCategary;
+		/*if(Integer.valueOf(flowerCategary) == 0)
 			return "爱情鲜花";
 		else if(Integer.valueOf(flowerCategary) == 1)
 			return "亲情鲜花";
 		else if(Integer.valueOf(flowerCategary) == 2)
 			return "友情鲜花";
 		else
-			return "鲜花";
+			return "鲜花";*/
 	}
 	public void setFlowerCategary(String flowerCategary) {
 		this.flowerCategary = flowerCategary;

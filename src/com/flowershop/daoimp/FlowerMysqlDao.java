@@ -115,7 +115,44 @@ System.out.println("数据库删除鲜花时出现错误！");
 	@Override
 	public boolean updateFlower(Flower flower) {
 		// TODO Auto-generated method stub
-		return false;
+
+		/**
+		 * +----------------+--------------+------+-----+---------+----------------+
+			| flowerId       | int(11)      | NO   | PRI | NULL    | auto_increment |
+			| flowerName     | varchar(255) | YES  | UNI | NULL    |                |
+			| flowerCategary | varchar(255) | NO   |     | NULL    |                |
+			| flowerPicture  | varchar(255) | NO   |     | NULL    |                |
+			| flowePrice     | varchar(11)  | NO   |     | NULL    |                |
+			| flowerDescribe | text         | NO   |     | NULL    |                |
+			+----------------+--------------+------+-----+---------+----------------+
+			insert into flower() values(null, ?, ?, ?, ?, ?);
+		 * */
+		
+		boolean flag = true;
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "update flower set flowerDescribe = ?, flowePrice = ? where flowerId = ?";
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, flower.getFlowerDescribe());
+			pstmt.setString(2, flower.getFlowePrice());
+			pstmt.setInt(3, flower.getFlowerId());
+			
+			int result = pstmt.executeUpdate();
+			if(result != 1) {
+				flag = false;
+System.out.println("花朵更新失败！");
+			}
+		} catch(SQLException e) {
+			flag = false;
+System.out.println("花朵更新失败！");
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedConnection(conn);
+			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+		}
+		return flag;
 	}
 
 	@Override
