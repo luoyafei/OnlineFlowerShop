@@ -1,6 +1,8 @@
 create database onlineFlowerShop;
 
-user:
+use onlineFlowerShop;
+
+用来记录注册的用户
 create table user (
 	userId int primary key auto_increment,
 	email varchar(255) not null,
@@ -8,20 +10,7 @@ create table user (
 	userRole int default 0
 );
 
-/*
-userId
-userNackName
-userPassword
-userTel
-userRole
-
-private Integer flowerId = 0;
-	private String flowerName = "鲜花";
-	private String flowerCategary = "";
-	private String flowerPicture = "";
-	private String flowerDescribe = "";
-	private String flowePrice = "";
-	*/
+用来记录上传的鲜花
 create table flower (
 	flowerId int primary key auto_increment,
 	flowerName varchar(255) unique,
@@ -30,41 +19,22 @@ create table flower (
 	flowePrice varchar(11) not null,
 	flowerDescribe text not null
 );
-
+用来记录反馈信息
 create table message (
 	messageId int primary key auto_increment,
 	userId int references user(userId),
 	messageContent text not null,
 	messageTiem datetime
 );
-/*
-| publicMsgId      | int(11)      | NO   | PRI | NULL              | auto_increment |
-| publicMsgTheme   | varchar(255) | NO   |     | NULL              |                |
-| publicMsgContent | text         | NO   |     | NULL              |                |
-| publicMsgTime    | datetime     | YES  |     | CURRENT_TIMESTAMP |
-*/
-/*
-flowerOrder
-orderId
-userId
-addr
-orderDate
-status
-*/
+用来记录订单
 create table flowerOrder (
-
 	orderId int primary key auto_increment,
 	userId int references user(userId),
 	addr varchar(255) not null,
 	status int default 0,
 	orderDate datetime default now()
 );
-/*
-flowerId
-unitPrice
-flowerCount
-flowerOrderId
-*/
+用来记录订单中的单个订单item条目
 create table flowerOrderItem (
 	ItemId int primary key auto_increment,
 	flowerId int references flower(flowerId),
@@ -72,11 +42,9 @@ create table flowerOrderItem (
 	flowerCount int default 0,
 	flowerOrderId int  references flowerOrder(orderId)
 );
-
+用来记录访问过的用户
 create table webCount (
 	countId int primary key auto_increment,
 	webIp varchar(30) unique,
 	countNum int default 0
 );
-
-
