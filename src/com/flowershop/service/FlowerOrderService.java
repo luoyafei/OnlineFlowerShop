@@ -12,4 +12,5 @@ public interface FlowerOrderService {
 	public boolean updateOrder(FlowerOrder order);
 	public FlowerOrder getFlowerOrderInOrderId(FlowerOrder order);
 	public List<FlowerOrder> getFlowerOrders(User user);
+	public List<FlowerOrder> getAllFlowerOrdersByStatus(Integer status);
 }

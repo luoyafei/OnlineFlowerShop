@@ -73,5 +73,10 @@ create table flowerOrderItem (
 	flowerOrderId int  references flowerOrder(orderId)
 );
 
+create table webCount (
+	countId int primary key auto_increment,
+	webIp varchar(30) unique,
+	countNum int default 0
+);
 
 

@@ -4,35 +4,33 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flowershop.bean.Flower;
 import com.flowershop.bean.FlowerOrder;
 import com.flowershop.bean.User;
 import com.flowershop.dao.FlowerOrderDao;
 import com.flowershop.factory.ConnectionFactory;
-import com.mysql.jdbc.Statement;
 
 public class FlowerOrderMysqlDao implements FlowerOrderDao {
 
+	
+	/**
+	 * mysql> desc flowerOrder;
+		+------------+--------------+------+-----+-------------------+----------------+
+		| Field      | Type         | Null | Key | Default           | Extra          |
+		+------------+--------------+------+-----+-------------------+----------------+
+		| orderId    | int(11)      | NO   | PRI | NULL              | auto_increment |
+		| userId     | int(11)      | YES  |     | NULL              |                |
+		| addr       | varchar(255) | NO   |     | NULL              |                |
+		| status     | int(11)      | YES  |     | 0                 |                |
+		| orderDate  | datetime     | YES  |     | CURRENT_TIMESTAMP |                |
+		| totalPrice | varchar(11)  | YES  |     | NULL              |                |
+		+------------+--------------+------+-----+-------------------+----------------+
+	 * */
 	@Override
 	public Integer insertOrder(FlowerOrder order) {
-		
-		/**
-		 * mysql> desc flowerOrder;
-			+------------+--------------+------+-----+-------------------+----------------+
-			| Field      | Type         | Null | Key | Default           | Extra          |
-			+------------+--------------+------+-----+-------------------+----------------+
-			| orderId    | int(11)      | NO   | PRI | NULL              | auto_increment |
-			| userId     | int(11)      | YES  |     | NULL              |                |
-			| addr       | varchar(255) | NO   |     | NULL              |                |
-			| status     | int(11)      | YES  |     | 0                 |                |
-			| orderDate  | datetime     | YES  |     | CURRENT_TIMESTAMP |                |
-			| totalPrice | varchar(11)  | YES  |     | NULL              |                |
-			+------------+--------------+------+-----+-------------------+----------------+
-		 * */
-		
 		// TODO Auto-generated method stub
 		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
 		String sql = "insert into flowerOrder() values(null, ?, ?, ?, now(), ?)";
@@ -60,6 +58,33 @@ System.out.println("用户提交订单时，往数据库插入订单的信息时
 			ConnectionFactory.newMysqlInstance().closedCPR(conn, pstmt, rs);
 		}
 		return orderId;
+	}
+
+	@Override
+	public List<FlowerOrder> getAllFlowerOrdersByStatus(Integer status) {
+		// TODO Auto-generated method stub
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "select orderId from flowerOrder where status = ?";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<FlowerOrder> orders = new ArrayList<FlowerOrder>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, status);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				FlowerOrder o = new FlowerOrder();
+				o.setOrderId(rs.getInt(1));
+				FlowerOrder order = getFlowerOrderInOrderId(o);
+				orders.add(order);
+			}
+		} catch(SQLException e) {
+System.out.println("获取所有的订单时出错1");
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedCPR(conn, pstmt, rs);
+		}
+		return orders;
 	}
 
 	@Override
@@ -91,10 +116,35 @@ System.out.println("用户提交订单时，往数据库插入订单的信息时
 		return flag;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.flowershop.dao.FlowerOrderDao#updateOrder(com.flowershop.bean.FlowerOrder)
+	 */
 	@Override
 	public boolean updateOrder(FlowerOrder order) {
 		// TODO Auto-generated method stub
-		return false;
+		boolean flag = false;
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "update flowerOrder set status = ? where orderId = ?";
+		PreparedStatement pstmt = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, order.getStatus());
+			pstmt.setInt(2, order.getOrderId());
+			if(pstmt.executeUpdate() >= 1)
+				flag = true;
+			else
+				flag = false;
+		} catch(SQLException e) {
+System.out.println("数据库更新订单时出现错误！");
+			flag = false;
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedConnection(conn);
+			ConnectionFactory.newMysqlInstance().closedPreparedStatement(pstmt);
+		}
+		
+		return flag;
 	}
 
 	@Override

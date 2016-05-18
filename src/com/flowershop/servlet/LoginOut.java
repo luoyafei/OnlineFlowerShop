@@ -37,7 +37,7 @@ public class LoginOut extends HttpServlet {
 			session.removeAttribute("user");
 			session.removeAttribute("car");
 		}
-		response.sendRedirect("/OnlineFlowerShop/pages/main/main.jsp");
+		response.sendRedirect("/OnlineFlowerShop/index.jsp");
 		
 	}
 

@@ -11,4 +11,12 @@ public interface FlowerOrderDao {
 	public boolean updateOrder(FlowerOrder order);
 	public FlowerOrder getFlowerOrderInOrderId(FlowerOrder order);
 	public List<FlowerOrder> getFlowerOrders(User user);
+	
+	
+	/**
+	 * 通过订单的状态，获取订单list
+	 * @param Integer status
+	 * @return List<FlowerOrder>
+	 * */
+	public List<FlowerOrder> getAllFlowerOrdersByStatus(Integer status);
 }

@@ -1,6 +1,11 @@
-package com.flowershop.servlet;
+package com.flowershop.servlet.AdminOperate;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,20 +13,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.flowershop.bean.FlowerOrder;
-import com.flowershop.factory.ServiceFactory;
+import com.flowershop.factory.ConnectionFactory;
 
 /**
- * Servlet implementation class DeleteOrder
+ * Servlet implementation class GetWebCount
  */
-@WebServlet("/DeleteOrder")
-public class DeleteOrder extends HttpServlet {
+@WebServlet("/GetWebCount")
+public class GetWebCount extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteOrder() {
+    public GetWebCount() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,29 +38,31 @@ public class DeleteOrder extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		
-		String flowerId = request.getParameter("item");
-		
-		FlowerOrder item = new FlowerOrder();
-		item.setOrderId(Integer.valueOf(flowerId));
-		
-		boolean flag = ServiceFactory.createOrderService().deleteOrder(item);
+		PrintWriter out = response.getWriter();
 		
 		
-		/**
-		 * 将结果当作返回数返回！
-		 * 删除成功，则返回0
-		 * 删除失败，返回1
-		 * */
-		String ok = null;
+		Connection conn = ConnectionFactory.newMysqlInstance().getConnection();
+		String sql = "select count(*) from webCount";
+		Statement stmt = null;
+		ResultSet rs = null;
+		Integer status = 0;
 		
-		if(flag)
-			ok = "0";
-		else
-			ok = "1";
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			rs.next();
+			status = rs.getInt(1);
+			
+		} catch(SQLException e) {
+		} finally {
+			ConnectionFactory.newMysqlInstance().closedCSR(conn, stmt, rs);
+		}
 		
-		response.sendRedirect("/OnlineFlowerShop/pages/myorderListShow/myorderList.jsp?ok="+ok);
+		String str = "{\"" + "status" + "\":\"" + status + "\"}";
+		out.print(str);
+		out.flush();
 		
-		return;
+		
 	}
 
 	/**

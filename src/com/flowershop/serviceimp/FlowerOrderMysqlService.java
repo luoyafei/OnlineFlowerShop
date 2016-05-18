@@ -15,6 +15,13 @@ public class FlowerOrderMysqlService implements FlowerOrderService {
 	public FlowerOrderMysqlService() {
 		fod = DaoFactory.createFlowerOrderDao();
 	}
+	
+	@Override
+	public List<FlowerOrder> getAllFlowerOrdersByStatus(Integer status) {
+		// TODO Auto-generated method stub
+		return fod.getAllFlowerOrdersByStatus(status);
+	}
+	
 	@Override
 	public Integer insertOrder(FlowerOrder order) {
 		// TODO Auto-generated method stub

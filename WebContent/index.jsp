@@ -30,6 +30,7 @@
 							<p align="right"><a href="pages/main/main.jsp">
 							<button type="button" class="btn btn-primary">进入系统</button>
 							</a></p>
+							<p><a href="/OnlineFlowerShop/pages/signInOut/adminLogin.jsp" style="float: right;">管理员登录</a></p>
 						</div>
 						</td>
 					</tr>

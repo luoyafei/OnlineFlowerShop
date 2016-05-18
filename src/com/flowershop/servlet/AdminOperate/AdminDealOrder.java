@@ -1,7 +1,6 @@
-package com.flowershop.servlet;
+package com.flowershop.servlet.AdminOperate;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,16 +11,16 @@ import com.flowershop.bean.FlowerOrder;
 import com.flowershop.factory.ServiceFactory;
 
 /**
- * Servlet implementation class DeleteOrder
+ * Servlet implementation class AdminDeleteOrder
  */
-@WebServlet("/DeleteOrder")
-public class DeleteOrder extends HttpServlet {
+@WebServlet("/AdminDealOrder")
+public class AdminDealOrder extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteOrder() {
+    public AdminDealOrder() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,27 +33,29 @@ public class DeleteOrder extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		
-		String flowerId = request.getParameter("item");
-		
+		String flag = request.getParameter("flag");	
+		String orderId = request.getParameter("item");
 		FlowerOrder item = new FlowerOrder();
-		item.setOrderId(Integer.valueOf(flowerId));
-		
-		boolean flag = ServiceFactory.createOrderService().deleteOrder(item);
-		
-		
+		item.setOrderId(Integer.valueOf(orderId));
+		if(flag.equals("0")) {
+			item.setStatus(1);
+		} else if(flag.equals("1")) {
+			item.setStatus(2);
+		}
+		boolean result = ServiceFactory.createOrderService().updateOrder(item);
 		/**
 		 * 将结果当作返回数返回！
-		 * 删除成功，则返回0
-		 * 删除失败，返回1
+		 * 更新成功，则返回0
+		 * 更新失败，返回1
 		 * */
 		String ok = null;
 		
-		if(flag)
+		if(result)
 			ok = "0";
 		else
 			ok = "1";
 		
-		response.sendRedirect("/OnlineFlowerShop/pages/myorderListShow/myorderList.jsp?ok="+ok);
+		response.sendRedirect("/OnlineFlowerShop/pages/amdinOperate/orderOperate.jsp?ok="+ok);
 		
 		return;
 	}

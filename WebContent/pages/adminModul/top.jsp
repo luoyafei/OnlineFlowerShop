@@ -7,15 +7,14 @@
 				<table class="table table-condensed">
 					<thead>
 						<tr>
-						<%-- <%
+						<%
 							User user = (User)session.getAttribute("user");
 							if(user != null && user.getUserRole() == 1) {
 						%>
-							<th><a><%=user.getEmail() %>,欢迎光临！</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/OnlineFlowerShop/LoginOut" style="color: red;">注销</a></th>
-						<%}else{
-							response.sendRedirect("/OnlineFlowerShop/index.jsp");
-						} %> --%>
-							<th><a href="/OnlineFlowerShop/index.jsp">花乐园网上花店系统</a></th>
+							<th><a><%=user.getEmail() %>,欢迎光临！</a></th>
+						<%}else{%>
+							<script type="text/javascript">window.location.href="/OnlineFlowerShop/index.jsp";</script>
+						<%} %>
 						</tr>
 					</thead>
 				</table>

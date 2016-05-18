@@ -30,7 +30,7 @@
 $(document).ready(function() {	
 
 	jQuery.jqsxfg51nav = function(jqsxfg51navhover) {
-		$(jqsxfg51navhover).prepend("<span></span>"); //懒人建站 http://www.51xuediannao.com/
+		$(jqsxfg51navhover).prepend("<span></span>");
 		
 		$(jqsxfg51navhover).each(function() { 
 			var linkText = $(this).find("a").html(); 
@@ -74,7 +74,7 @@ img{ border:0;}
 <div class="col-md-3 column">
 </div>
 		<div class="col-md-5 column">
-			<font size="6" color="black">本网站目前访问人数为</font>
+			<font size="6" color="black">本网站目前总访问人数为:&nbsp;&nbsp;<span id="countNum" style="color: red; font-size: 42px;"></span>人</font>
 		</div>
 		<div class="col-md-4 column">
 	</div>
@@ -88,7 +88,15 @@ img{ border:0;}
         <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
         <!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> 
-
+		<script>
+			
+			$(document).ready(function() {
+				$.post('/OnlineFlowerShop/GetWebCount', {}, function(data, textStatus){
+					$("#countNum").text(data.status);
+				}, 'json');
+			});
+			
+		</script>
 
 </body>
 </html>
