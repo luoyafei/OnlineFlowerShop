@@ -1,6 +1,7 @@
 package com.flowershop.servlet.AdminOperate;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.flowershop.bean.Message;
-import com.flowershop.bean.User;
 import com.flowershop.factory.ServiceFactory;
 
 /**

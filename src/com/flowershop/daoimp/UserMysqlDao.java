@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flowershop.bean.Message;
 import com.flowershop.bean.User;
 import com.flowershop.dao.UserDao;
 import com.flowershop.factory.ConnectionFactory;
